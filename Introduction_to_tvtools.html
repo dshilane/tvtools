@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to tvtools</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to tvtools</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Longitudinal data collected over a period of time can provide a view of a population’s changes. Gathering and structuring longitudinal information may require a more flexible design for the data. When a single subject’s records are updated at random intervals, and when the length of follow-up varies, a more complex data structure may be required. <strong>Panel data</strong> provides one option for storing longitudinal records. This structures information over intervals of time, with a variable number of records per subject. While useful for storing data, the structure of panel data creates complexities in data analyses. Calculations and models necessarily must account for the length of time.</p>
+<p>The <strong>tvtools</strong> package for R was published to simplify the process of exploring and analyzing panel data. This vignette will provide an overview of panel data and introduce a range of methods.</p>
+</div>
+<div id="sample-data" class="section level2">
+<h2>Sample Data</h2>
+<p>The tvtools package includes a sample data set called <strong>simulated.chd</strong>. These fictional records were simulated based on a scenario of medical follow-up for patients with coronary heart disease (CHD).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Note: Once the package is compiled, replace these lines with a call to</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># library(tvtools).</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">source</span>(<span class="st">&quot;calculate.utilization.R&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">source</span>(<span class="st">&quot;count.events.R&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">source</span>(<span class="st">&quot;create.baseline.R&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">source</span>(<span class="st">&quot;cross.sectional.data.R&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">source</span>(<span class="st">&quot;crude.rates.R&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">source</span>(<span class="st">&quot;era.splits.R&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">source</span>(<span class="st">&quot;first.event.R&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">source</span>(<span class="st">&quot;followup.time.R&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">source</span>(<span class="st">&quot;measurement.rate.R&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">source</span>(<span class="st">&quot;panel.gaps.R&quot;</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="kw">source</span>(<span class="st">&quot;panel.overlaps.R&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="kw">source</span>(<span class="st">&quot;summarize.panel.R&quot;</span>)</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="kw">source</span>(<span class="st">&quot;structure.panel.R&quot;</span>)</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="kw">source</span>(<span class="st">&quot;unusual.duration.R&quot;</span>)</span>
+<span id="cb1-17"><a href="#cb1-17"></a></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="kw">library</span>(data.table)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>simulated.chd &lt;-<span class="st"> </span><span class="kw">fread</span>(<span class="dt">input =</span> <span class="st">&quot;simulated_data.csv&quot;</span>)</span>
+<span id="cb1-20"><a href="#cb1-20"></a>orig.data &lt;-<span class="st"> </span><span class="kw">copy</span>(simulated.chd)</span></code></pre></div>
+<p>We can begin exploring the data by noting its dimensionality:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">dim</span>(simulated.chd)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; [1] 33572    13</span></span></code></pre></div>
+<p>The first ten rows of the simulated.chd data are:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>simulated.chd[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ]</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt;                   id  t1  t2 age  sex region</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;  1: 01KTl0KSK88EFV8N   0   8  69 Male   West</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;  2: 01KTl0KSK88EFV8N   8  30  69 Male   West</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;  3: 01KTl0KSK88EFV8N  30  38  69 Male   West</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt;  4: 01KTl0KSK88EFV8N  38  46  69 Male   West</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt;  5: 01KTl0KSK88EFV8N  46  66  69 Male   West</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt;  6: 01KTl0KSK88EFV8N  66  90  69 Male   West</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;  7: 01KTl0KSK88EFV8N  90  94  69 Male   West</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt;  8: 01KTl0KSK88EFV8N  94 110  69 Male   West</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt;  9: 01KTl0KSK88EFV8N 110 124  69 Male   West</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; 10: 01KTl0KSK88EFV8N 124 133  69 Male   West</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;                       baseline.condition diabetes ace bb statin hospital death</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt;  1: moderate symptoms or light procedure        0   1  0      1        0     0</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt;  2: moderate symptoms or light procedure        0   1  1      1        0     0</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt;  3: moderate symptoms or light procedure        0   1  1      0        0     0</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt;  4: moderate symptoms or light procedure        0   1  0      0        0     0</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt;  5: moderate symptoms or light procedure        0   1  1      0        0     0</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt;  6: moderate symptoms or light procedure        0   1  1      1        0     0</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt;  7: moderate symptoms or light procedure        0   0  1      1        0     0</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt;  8: moderate symptoms or light procedure        0   1  1      1        0     0</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt;  9: moderate symptoms or light procedure        0   1  0      1        0     0</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt; 10: moderate symptoms or light procedure        0   0  0      1        0     0</span></span></code></pre></div>
+<p>Here we see a partial view of the records for a single patient with id 01KTl0KSK88EFV8N. The variables t1 and t2 represent a time interval for the record. This will be discussed further in the section on the structure of panel data. The patient’s age at diagnosis, sex, geographic region, baseline condition, and diabetes status are provided. The variables ace (ace inhibitor), bb (beta blocker), and statin provide records of the possession of common prescription medications for patients with CHD. The patient’s admissions to the hospital are recorded, and the death variable is used to identify cases of mortality. The medications, hospital status, and mortality of the patient can change over time. These will also be discussed further.</p>
+<p>The simulated data include records on many patients. For instance, a portion of the recods for several patients are shown below:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>simulated.chd[<span class="dv">58</span><span class="op">:</span><span class="dv">70</span>, ]</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt;                   id t1 t2 age  sex    region</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt;  1: 01ZbYuUoYJeIyiVH  0  1  61 Male Northeast</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;  2: 01ZbYuUoYJeIyiVH  1 10  61 Male Northeast</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt;  3: 01ZbYuUoYJeIyiVH 10 30  61 Male Northeast</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt;  4: 01ZbYuUoYJeIyiVH 30 31  61 Male Northeast</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt;  5: 01ZbYuUoYJeIyiVH 31 43  61 Male Northeast</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt;  6: 01ZbYuUoYJeIyiVH 43 70  61 Male Northeast</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt;  7: 01ZbYuUoYJeIyiVH 70 70  61 Male Northeast</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt;  8: 01oLxxu87rRDCIvo  0 34  63 Male   Midwest</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt;  9: 01oLxxu87rRDCIvo 34 61  63 Male   Midwest</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; 10: 01oLxxu87rRDCIvo 61 64  63 Male   Midwest</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; 11: 01oLxxu87rRDCIvo 64 64  63 Male   Midwest</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; 12: 01rOm5qEH4GLCiL5  0  1  62 Male   Midwest</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt; 13: 01rOm5qEH4GLCiL5  1 90  62 Male   Midwest</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt;                       baseline.condition diabetes ace bb statin hospital death</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="co">#&gt;  1:      Major heart attack or operation        0   0  0      0        0     0</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co">#&gt;  2:      Major heart attack or operation        0   1  0      0        0     0</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="co">#&gt;  3:      Major heart attack or operation        0   1  1      0        0     0</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="co">#&gt;  4:      Major heart attack or operation        0   1  1      1        0     0</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="co">#&gt;  5:      Major heart attack or operation        0   0  1      1        0     0</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="co">#&gt;  6:      Major heart attack or operation        0   0  1      1        1     0</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt;  7:      Major heart attack or operation        0   0  1      1        1     1</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt;  8: moderate symptoms or light procedure        0   1  1      1        0     0</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt;  9: moderate symptoms or light procedure        0   1  1      1        0     0</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt; 10: moderate symptoms or light procedure        0   1  1      1        0     0</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; 11: moderate symptoms or light procedure        0   0  0      0        0     0</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="co">#&gt; 12:      Major heart attack or operation        0   1  1      1        0     0</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="co">#&gt; 13:      Major heart attack or operation        0   1  1      1        0     0</span></span></code></pre></div>
+</div>
+<div id="structure-of-panel-data" class="section level2">
+<h2>Structure of Panel Data</h2>
+<p>We can now more carefully define the elements of panel data. Some necessary variables include the:</p>
+<ul>
+<li><p><strong>subject identifier</strong>: This uniquely identifies a subject so that records across multiple rows can be linked.</p></li>
+<li><p><strong>time interval</strong>: This records a period of time [t1, t2) during which the record is observed. In particular, panel data assumes that a) the values of the record <strong>take effect at time t1</strong>, and b) the values <strong>remain constant</strong> from time t1 to time t2. It is important for the time intervals in a subject’s different rows to be mutually exclusive.</p></li>
+<li><p><strong>constant variables</strong>: These values appear in a patient’s records but cannot change. For instance, a patient’s age at the time of the first diagnosis of CHD would not vary across the records in follow-up. Important baseline factors, such as a history of comorbid medical conditions, might also be included as constant variables.</p></li>
+<li><p><strong>time-varying variables</strong>: These values can change over time. Records of a patient’s weight, laboratory tests, medication usage, and hospitalization status are all examples of time-varying variables. Medical outcomes such as medication adherence or the costs of hospitalization can often be the basis of considerable study. Time-varying data could reasonably illustrate a period during which a medical patient is adherent to a medication or the duration of a hospital admission. However, acute events such as a heart attack are necessarily not long lasting. Ideally a panel would be structured to update the record at a time shortly after the event. In some cases, interpretation of the panel is required. For instance, a lengthy interval that begins with a heart attack would require recognition that the event did not last for the entire duration. Likewise, if an event such as mortality is observed during a lengthy interval, the panel should be restructured with a new record marking the death after that previous interval. Because of these intricacies, additional attention to the details can be required. A practitioner should be careful to properly interpret the events recorded in panel data and to ensure their quality.</p></li>
+</ul>
+<p>To better examine these issues, we will consider the first few rows of the simulated.chd data:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>simulated.chd[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, ]</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt;                  id t1 t2 age  sex region                   baseline.condition</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  8 30  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N 30 38  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;    diabetes ace bb statin hospital death</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; 1:        0   1  0      1        0     0</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; 2:        0   1  1      1        0     0</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; 3:        0   1  1      0        0     0</span></span></code></pre></div>
+<p>This illustrates a short period of follow-up for a patient. The first row begins with t1 = 0, the moment of the patient’s initial diagnosis of CHD. The patient is 69 years old, male, and living in the west. CHD was diagnosed from a baseline condition that included moderate symptoms or a light procedure. The patient did not have diabetes. At the beginning of the interval (t1 = 0), the patient possessed ace inhibitors (ace = 1) and statin medications (statin = 1). The patient did not possess a beta blocker (bb = 0). The patient was also not admitted to the hospital (hospital = 0) and was alive (death = 0). This state of affairs was assumed to persist for 8 days, until the end of the first interval (t2 = 8). Then a new record (the second row) was entered. It is certainly possible for an update to include no changes to the time-varying records. However, an efficient panel structure would only generate new records when updates occur. In this case, the patient filled a prescription for a beta blocker (bb = 1) at time t1 = 8 days. The patient was then on all three medications (ace = 1, bb = 1, statin = 1) with no hospitalizations (hospital = 0) and while remaining alive (death = 0). A third row was generated at day t1 = 30. In this case, the patient no longer possessed a statin medication (statin = 0), while the previous row’s other factors remained fixed. This record was maintained for 8 days (t2 = 38). Generalizing to all of the records for a single patient, the panel presents a historical record of the patient’s condition. The full set of panel data then presents the recorded histories for all of the patients. Each patient is followed from their moment of diagnosis until death or a loss of follow-up.</p>
+</div>
+<div id="sorting" class="section level2">
+<h2>Sorting</h2>
+<p>For most applications, structuring panel data in sorted order can simplify the subsequent analyses. The <strong>structure.panel</strong> method is used to sort by the subject’s identifier and beginning time interval.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>simulated.chd &lt;-<span class="st"> </span><span class="kw">structure.panel</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>simulated.chd[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, ]</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt;                  id t1 t2 age  sex region                   baseline.condition</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  8 30  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N 30 38  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt;    diabetes ace bb statin hospital death</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; 1:        0   1  0      1        0     0</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; 2:        0   1  1      1        0     0</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; 3:        0   1  1      0        0     0</span></span></code></pre></div>
+<p>As an additional example, we’ll show how an unsorted panel data set can be reordered:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">structure.panel</span>(<span class="dt">dat =</span> simulated.chd[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">1</span>), ])</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt;                  id t1 t2 age  sex region                   baseline.condition</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  8 30  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N 30 38  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; 4: 01KTl0KSK88EFV8N 38 46  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt;    diabetes ace bb statin hospital death</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; 1:        0   1  0      1        0     0</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; 2:        0   1  1      1        0     0</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; 3:        0   1  1      0        0     0</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; 4:        0   1  0      0        0     0</span></span></code></pre></div>
+</div>
+<div id="methods" class="section level2">
+<h2>Methods</h2>
+<p>The tvtools package is designed to facilitate a range of methods to explore and analyze panel data. These include summarization techniques, methods of calculation, and quality checks.</p>
+<div id="summarization" class="section level3">
+<h3>Summarization</h3>
+<p>The <strong>summarize.panel</strong> function is designed to provide a simple summary of a panel data structure. The column name for the subject’s unique identifier is specified to calculate the number of subjects and the mean records per subject. The column names for the time intervals help to gain a sense of the amount of follow-up time observed in the data.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">summarize.panel</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt;    total.records unique.ids mean.records.per.id total.followup max.followup</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; 1:         33572       1000              33.572         722772         2606</span></span></code></pre></div>
+<p>This summary can also be produced in subgroups by specifying one or more categorical grouping variables:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">summarize.panel</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="dt">grouping.variables =</span> <span class="st">&quot;sex&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;       sex total.records unique.ids mean.records.per.id total.followup</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; 1: Female         16592        487            34.06982         358387</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; 2:   Male         16980        513            33.09942         364385</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;    max.followup</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; 1:         2606</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; 2:         2602</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="kw">summarize.panel</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb9-11"><a href="#cb9-11"></a>    <span class="dt">grouping.variables =</span> <span class="kw">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;region&quot;</span>))</span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;       sex    region total.records unique.ids mean.records.per.id total.followup</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; 1: Female   Midwest          3063         93            32.93548          68463</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; 2: Female Northeast          5237        134            39.08209         108336</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; 3: Female     South          2796         93            30.06452          61332</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; 4: Female      West          5496        167            32.91018         120256</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; 5:   Male   Midwest          3108         98            31.71429          68222</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; 6:   Male Northeast          5074        160            31.71250         112672</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; 7:   Male     South          3699        103            35.91262          76110</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt; 8:   Male      West          5099        152            33.54605         107381</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt;    max.followup</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; 1:         2606</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; 2:         2601</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; 3:         2567</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; 4:         2496</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; 5:         2564</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt; 6:         2498</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt; 7:         2569</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt; 8:         2602</span></span></code></pre></div>
+</div>
+<div id="follow-up-time-calculations" class="section level3">
+<h3>Follow-Up Time Calculations</h3>
+<p>The length of follow-up time can be a critical factor in the study’s analytical judgments and selected methods. In some applications, one might choose to only include patients who completed at least 1 year of observation or to ensure that the median length of follow-up is sufficient for the goals of the study.</p>
+<p>The followup.time function calculates the length of observation for each patient. This may be performed in two separate ways:</p>
+<ul>
+<li><p><strong>Max Follow-Up</strong>: Calculate the last observed time for each subject.</p></li>
+<li><p><strong>Total Follow-Up</strong>: Calculate the overall amount of observed time for each subject. This has the effect of removing missing time intervals or including reference points other than time zero.</p></li>
+</ul>
+<p>On the simulated.chd data, we can calculate the maximum follow-up time for each subject:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">followup.time</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">calculate.as =</span> <span class="st">&quot;max&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt;                     id followup.time</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N          1075</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH            70</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo            64</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5          2389</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK            95</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;   ---                               </span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy           127</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ          1463</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS           813</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp           255</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2            63</span></span></code></pre></div>
+<p>Likewise, shifting to the total follow-up also leads to the same results.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">followup.time</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="dt">calculate.as =</span> <span class="st">&quot;total&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt;                     id followup.time</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N          1075</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH            70</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo            64</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5          2389</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK            95</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt;   ---                               </span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy           127</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ          1463</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS           813</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp           255</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2            63</span></span></code></pre></div>
+<p>This is true because the simulated.chd data begins at a baseline of t1 = 0 for each patient and does not include any missing time intervals over the length of any patient’s observation.</p>
+<p>The followup.time method can be applied to all or a subset of a single subject’s records. Let’s consider the case of one patient from the simulated.chd data:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">followup.time</span>(<span class="dt">dat =</span> simulated.chd[id <span class="op">==</span><span class="st"> </span>id[<span class="dv">1</span>], ], <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">calculate.as =</span> <span class="st">&quot;total&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt;                  id followup.time</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N          1075</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="kw">followup.time</span>(<span class="dt">dat =</span> simulated.chd[id <span class="op">==</span><span class="st"> </span>id[<span class="dv">1</span>], ][<span class="dv">5</span><span class="op">:</span><span class="dv">20</span>, ], <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb12-6"><a href="#cb12-6"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">calculate.as =</span> <span class="st">&quot;total&quot;</span>)</span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt;                  id followup.time</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N           195</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="kw">followup.time</span>(<span class="dt">dat =</span> simulated.chd[id <span class="op">==</span><span class="st"> </span>id[<span class="dv">1</span>], ][<span class="dv">5</span><span class="op">:</span><span class="dv">20</span>, ], <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb12-10"><a href="#cb12-10"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">calculate.as =</span> <span class="st">&quot;max&quot;</span>)</span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt;                  id followup.time</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N           241</span></span></code></pre></div>
+<p>These calculations show that the patient was followed for a total of 1075 days. The records from the subject’s 5th to 20th records encompass a total of 195 days, with day 241 as the latest in this period.</p>
+<p>The followup times can also be appended to the original data set with a user-selected name for the new column:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">followup.time</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">calculate.as =</span> <span class="st">&quot;max&quot;</span>, </span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="dt">append.to.data =</span> T, <span class="dt">followup.name =</span> <span class="st">&quot;followup.time&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="kw">print</span>(simulated.chd[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ])</span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt;                  id t1 t2 age  sex region                   baseline.condition</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  8 30  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N 30 38  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt; 4: 01KTl0KSK88EFV8N 38 46  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">#&gt; 5: 01KTl0KSK88EFV8N 46 66  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">#&gt;    diabetes ace bb statin hospital death followup.time</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">#&gt; 1:        0   1  0      1        0     0          1075</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="co">#&gt; 2:        0   1  1      1        0     0          1075</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt; 3:        0   1  1      0        0     0          1075</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt; 4:        0   1  0      0        0     0          1075</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt; 5:        0   1  1      0        0     0          1075</span></span></code></pre></div>
+</div>
+</div>
+<div id="measuring-the-time-to-events" class="section level2">
+<h2>Measuring the Time to Events</h2>
+<p>Outcome variables such as survival times may be calculated from panel data by identifying the time of an event. The <strong>first.event</strong> method is designed to facilitate these calculations on a collection of outcome variables. By specifying the identifier, we can perform the calculation separately on each subject in the data set. In the first example, we calculate the initiation times of the three medicines – the times at which a presciption for each medicine was first filled by the patient.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">first.event</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;ace&quot;</span>, <span class="st">&quot;bb&quot;</span>, <span class="st">&quot;statin&quot;</span>), </span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt;                     id ace.first.event bb.first.event statin.first.event</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N               0              8                  0</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH               1             10                 30</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo               0              0                  0</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5               0              0                  0</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK               1             33                  0</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt;   ---                                                                   </span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy               0              0                  1</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ             220              0                  0</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS               0              7                  0</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp              73             35                  4</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2               0              0                  1</span></span></code></pre></div>
+<p>Likewise, we can calculate the time to a first hospitalization or mortality. Note that NA values are displayed for patients who were not hospitalized and also for those who survived for the period of follow-up.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">first.event</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), </span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt;                     id hospital.first.event death.first.event</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N                   NA                NA</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH                   43                70</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo                   NA                NA</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5                  100                NA</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK                   NA                NA</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt;   ---                                                        </span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy                   NA                NA</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ                    0                NA</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS                   NA                NA</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp                  255                NA</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2                   NA                NA</span></span></code></pre></div>
+<p>These times to a first event can also be calculated on the entire population by setting id.name = NULL:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">first.event</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="ot">NULL</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), </span>
+<span id="cb16-2"><a href="#cb16-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt;    hospital.first.event death.first.event</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#&gt; 1:                    0                60</span></span></code></pre></div>
+<p>These calculated quantities can also be appended to the data set:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>one.patient &lt;-<span class="st"> </span><span class="kw">first.event</span>(<span class="dt">dat =</span> simulated.chd[id <span class="op">==</span><span class="st"> &quot;01ZbYuUoYJeIyiVH&quot;</span>, ], <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, </span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">append.to.table =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="dt">event.name =</span> <span class="st">&quot;time&quot;</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="kw">setorderv</span>(<span class="dt">x =</span> one.patient, <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;t1&quot;</span>))</span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="kw">print</span>(one.patient)</span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co">#&gt;                  id t1 t2 age  sex    region              baseline.condition</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="co">#&gt; 1: 01ZbYuUoYJeIyiVH  0  1  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co">#&gt; 2: 01ZbYuUoYJeIyiVH  1 10  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co">#&gt; 3: 01ZbYuUoYJeIyiVH 10 30  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt; 4: 01ZbYuUoYJeIyiVH 30 31  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; 5: 01ZbYuUoYJeIyiVH 31 43  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; 6: 01ZbYuUoYJeIyiVH 43 70  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt; 7: 01ZbYuUoYJeIyiVH 70 70  61 Male Northeast Major heart attack or operation</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt;    diabetes ace bb statin hospital death followup.time hospital.time death.time</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a><span class="co">#&gt; 1:        0   0  0      0        0     0            70            43         70</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a><span class="co">#&gt; 2:        0   1  0      0        0     0            70            43         70</span></span>
+<span id="cb17-17"><a href="#cb17-17"></a><span class="co">#&gt; 3:        0   1  1      0        0     0            70            43         70</span></span>
+<span id="cb17-18"><a href="#cb17-18"></a><span class="co">#&gt; 4:        0   1  1      1        0     0            70            43         70</span></span>
+<span id="cb17-19"><a href="#cb17-19"></a><span class="co">#&gt; 5:        0   0  1      1        0     0            70            43         70</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a><span class="co">#&gt; 6:        0   0  1      1        1     0            70            43         70</span></span>
+<span id="cb17-21"><a href="#cb17-21"></a><span class="co">#&gt; 7:        0   0  1      1        1     1            70            43         70</span></span></code></pre></div>
+<p>Similarly, the <strong>last.event</strong> method, designed with similar inputs, is used to find the last time at which an event occurs:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">last.event</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), </span>
+<span id="cb18-2"><a href="#cb18-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt;                  id hospital.last.event death.last.event</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N                  NA               NA</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt; 2: 01ZbYuUoYJeIyiVH                  70               70</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt; 3: 01oLxxu87rRDCIvo                  NA               NA</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt; 4: 01rOm5qEH4GLCiL5                2039               NA</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; 5: 021eg6OjCoGotbXK                  NA               NA</span></span></code></pre></div>
+<p>If the end of an interval is preferred, the t2 column may be substituted:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">last.event</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="ot">NULL</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), </span>
+<span id="cb19-2"><a href="#cb19-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t2&quot;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#&gt;    hospital.last.event death.last.event</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt; 1:                2606             2564</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="co">#&gt; 2:                  NA               NA</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#&gt; 3:                  NA               NA</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co">#&gt; 4:                  NA               NA</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="co">#&gt; 5:                  NA               NA</span></span></code></pre></div>
+<p>The last.event method is especially helpful when looking across the sample for the latest events:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">last.event</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="ot">NULL</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), </span>
+<span id="cb20-2"><a href="#cb20-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co">#&gt;    hospital.last.event death.last.event</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#&gt; 1:                2606             2564</span></span></code></pre></div>
+</div>
+<div id="cross-sectional-data" class="section level2">
+<h2>Cross-Sectional Data</h2>
+<p>Panel data differs from more standard data in terms of its structure and variability of longitudinal observation. Being able to convert the panel to a more traditional form can facilitate a range of analyses. In order to do so, we must consider the:</p>
+<ul>
+<li><p><strong>Baseline Factors</strong>: These would be measurements recorded at the time of the study’s baseline.</p></li>
+<li><p><strong>Outcomes</strong>: These would measure the time to a subject’s first event relative to the baseline.</p></li>
+</ul>
+<p>The <strong>cross.sectional.data</strong> method converts panel data into this standard form, with one row per subject. Baseline measurements are recorded as of the specified time, while outcomes are measured as the time to the first occurrence of the event (or NA if not observed). The subject’s overall length of follow-up is also calculated to enable survival analyses of censored data. We can specify the time.point as 0 to conduct the study from the beginning of the period of observation:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>simulated.chd[, followup.time <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="ot">NULL</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>baseline &lt;-<span class="st"> </span><span class="kw">cross.sectional.data</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">time.point =</span> <span class="dv">0</span>, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, </span>
+<span id="cb22-2"><a href="#cb22-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>))</span>
+<span id="cb22-3"><a href="#cb22-3"></a>baseline[<span class="dv">1</span>, ]</span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co">#&gt;                  id age  sex region                   baseline.condition</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  69 Male   West moderate symptoms or light procedure</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#&gt;    diabetes ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="co">#&gt; 1:        0   1  0      1                   NA                NA          1075</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="co">#&gt; 1:                    0</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a>baseline[hospital.first.event <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, ][<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="co">#&gt;                  id age  sex    region              baseline.condition diabetes</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="co">#&gt; 1: 01ZbYuUoYJeIyiVH  61 Male Northeast Major heart attack or operation        0</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a><span class="co">#&gt; 2: 01rOm5qEH4GLCiL5  62 Male   Midwest Major heart attack or operation        0</span></span>
+<span id="cb22-14"><a href="#cb22-14"></a><span class="co">#&gt;    ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb22-15"><a href="#cb22-15"></a><span class="co">#&gt; 1:   0  0      0                   43                70            70</span></span>
+<span id="cb22-16"><a href="#cb22-16"></a><span class="co">#&gt; 2:   1  1      1                  100                NA          2389</span></span>
+<span id="cb22-17"><a href="#cb22-17"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb22-18"><a href="#cb22-18"></a><span class="co">#&gt; 1:                    0</span></span>
+<span id="cb22-19"><a href="#cb22-19"></a><span class="co">#&gt; 2:                    0</span></span>
+<span id="cb22-20"><a href="#cb22-20"></a>baseline[death.first.event <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, ][<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb22-21"><a href="#cb22-21"></a><span class="co">#&gt;                  id age  sex    region              baseline.condition diabetes</span></span>
+<span id="cb22-22"><a href="#cb22-22"></a><span class="co">#&gt; 1: 01ZbYuUoYJeIyiVH  61 Male Northeast Major heart attack or operation        0</span></span>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="co">#&gt; 2: 0bt4Duak3aWCPO7E  71 Male   Midwest Major heart attack or operation        0</span></span>
+<span id="cb22-24"><a href="#cb22-24"></a><span class="co">#&gt;    ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb22-25"><a href="#cb22-25"></a><span class="co">#&gt; 1:   0  0      0                   43                70            70</span></span>
+<span id="cb22-26"><a href="#cb22-26"></a><span class="co">#&gt; 2:   0  0      1                    0              2564          2564</span></span>
+<span id="cb22-27"><a href="#cb22-27"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb22-28"><a href="#cb22-28"></a><span class="co">#&gt; 1:                    0</span></span>
+<span id="cb22-29"><a href="#cb22-29"></a><span class="co">#&gt; 2:                    0</span></span></code></pre></div>
+<p>The <strong>create.baseline</strong> method is a light wrapper of <strong>cross.sectional.data</strong> that forces the time point to 0:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>baseline<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">create.baseline</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb23-2"><a href="#cb23-2"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>))</span>
+<span id="cb23-3"><a href="#cb23-3"></a>baseline<span class="fl">.2</span>[hospital.first.event <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, ][<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt;                  id age  sex    region              baseline.condition diabetes</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; 1: 01ZbYuUoYJeIyiVH  61 Male Northeast Major heart attack or operation        0</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="co">#&gt; 2: 01rOm5qEH4GLCiL5  62 Male   Midwest Major heart attack or operation        0</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="co">#&gt;    ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a><span class="co">#&gt; 1:   0  0      0                   43                70            70</span></span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="co">#&gt; 2:   1  1      1                  100                NA          2389</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a><span class="co">#&gt; 1:                    0</span></span>
+<span id="cb23-12"><a href="#cb23-12"></a><span class="co">#&gt; 2:                    0</span></span>
+<span id="cb23-13"><a href="#cb23-13"></a>baseline<span class="fl">.2</span>[death.first.event <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, ][<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb23-14"><a href="#cb23-14"></a><span class="co">#&gt;                  id age  sex    region              baseline.condition diabetes</span></span>
+<span id="cb23-15"><a href="#cb23-15"></a><span class="co">#&gt; 1: 01ZbYuUoYJeIyiVH  61 Male Northeast Major heart attack or operation        0</span></span>
+<span id="cb23-16"><a href="#cb23-16"></a><span class="co">#&gt; 2: 0bt4Duak3aWCPO7E  71 Male   Midwest Major heart attack or operation        0</span></span>
+<span id="cb23-17"><a href="#cb23-17"></a><span class="co">#&gt;    ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb23-18"><a href="#cb23-18"></a><span class="co">#&gt; 1:   0  0      0                   43                70            70</span></span>
+<span id="cb23-19"><a href="#cb23-19"></a><span class="co">#&gt; 2:   0  0      1                    0              2564          2564</span></span>
+<span id="cb23-20"><a href="#cb23-20"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb23-21"><a href="#cb23-21"></a><span class="co">#&gt; 1:                    0</span></span>
+<span id="cb23-22"><a href="#cb23-22"></a><span class="co">#&gt; 2:                    0</span></span></code></pre></div>
+<p>A cross-sectional data set can also be produced at later times. In these settings, the time to the first event only includes events that occur at or after the cross-sectional time point. By specifying relative.followup = FALSE, the event times and length of follow-up are recorded in absolute terms (relative to time zero rather than the cross-sectional baseline).</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>cs<span class="fl">.365</span> &lt;-<span class="st"> </span><span class="kw">cross.sectional.data</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">time.point =</span> <span class="dv">365</span>, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, </span>
+<span id="cb24-2"><a href="#cb24-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">relative.followup =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>cs<span class="fl">.365</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#&gt;                  id age  sex  region                   baseline.condition</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  69 Male    West moderate symptoms or light procedure</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="co">#&gt; 2: 01rOm5qEH4GLCiL5  62 Male Midwest      Major heart attack or operation</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="co">#&gt;    diabetes ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="co">#&gt; 1:        0   1  1      1                   NA                NA          1075</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="co">#&gt; 2:        0   1  1      1                  561                NA          2389</span></span>
+<span id="cb24-10"><a href="#cb24-10"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb24-11"><a href="#cb24-11"></a><span class="co">#&gt; 1:                  365</span></span>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="co">#&gt; 2:                  365</span></span></code></pre></div>
+<p>Alternatively, we can specify relative.followup = TRUE to calculate the event and followup times after the cross-sectional baseline.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>cs.<span class="fl">365.</span>relative &lt;-<span class="st"> </span><span class="kw">cross.sectional.data</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">time.point =</span> <span class="dv">365</span>, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, </span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">relative.followup =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb25-3"><a href="#cb25-3"></a>cs.<span class="fl">365.</span>relative[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="co">#&gt;                  id age  sex  region                   baseline.condition</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  69 Male    West moderate symptoms or light procedure</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="co">#&gt; 2: 01rOm5qEH4GLCiL5  62 Male Midwest      Major heart attack or operation</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="co">#&gt;    diabetes ace bb statin hospital.first.event death.first.event followup.time</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a><span class="co">#&gt; 1:        0   1  1      1                   NA                NA           710</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="co">#&gt; 2:        0   1  1      1                  196                NA          2024</span></span>
+<span id="cb25-10"><a href="#cb25-10"></a><span class="co">#&gt;    cross.sectional.time</span></span>
+<span id="cb25-11"><a href="#cb25-11"></a><span class="co">#&gt; 1:                  365</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a><span class="co">#&gt; 2:                  365</span></span></code></pre></div>
+<p>It is also possible to create a purely cross-sectional data set with no outcome measurements by setting outcome.names = NULL. Then all of the measurements will be produced from the time of the cross-sectional baseline.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>cs.no.outcomes &lt;-<span class="st"> </span><span class="kw">create.baseline</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb26-2"><a href="#cb26-2"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">outcome.names =</span> <span class="ot">NULL</span>)</span>
+<span id="cb26-3"><a href="#cb26-3"></a>cs.no.outcomes[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ]</span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="co">#&gt;                  id age  sex    region                   baseline.condition</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  69 Male      West moderate symptoms or light procedure</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="co">#&gt; 2: 01ZbYuUoYJeIyiVH  61 Male Northeast      Major heart attack or operation</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="co">#&gt;    diabetes ace bb statin hospital death cross.sectional.time</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="co">#&gt; 1:        0   1  0      1        0     0                    0</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="co">#&gt; 2:        0   0  0      0        0     0                    0</span></span></code></pre></div>
+<p>As a reminder, summary statistics like the mean age at diagnosis should be calculated based on one row per patient. Otherwise, the mean value would be weighted according to the patient’s number of rows in the panel data. As a point of comparison, consider the mean age in the baseline data versus the mean age in the panel data:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>baseline[, <span class="kw">mean</span>(age)]</span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="co">#&gt; [1] 64.982</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>simulated.chd[, <span class="kw">mean</span>(age)]</span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="co">#&gt; [1] 64.81908</span></span></code></pre></div>
+</div>
+<div id="calculating-utilization" class="section level2">
+<h2>Calculating Utilization</h2>
+<p>Time-varying factors with binary measurements can include intermittent periods of utilization. Calculating how much or how often a medication is used – or the amount of time spent in the hospital – can be the basis for studying the effect or cost of an intervention. The <strong>calculate.utilization</strong> method facilitates calculations of the total amount or proportion of time that a binary outcome variable is in effect. This calculation can be performed for a specified interval of time. As an initial example, we will calculate the number of days that each patient possessed each medication or was hospitalized during the first year (365 days) of follow-up:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">calculate.utilization</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;ace&quot;</span>, <span class="st">&quot;bb&quot;</span>, <span class="st">&quot;statin&quot;</span>, </span>
+<span id="cb28-2"><a href="#cb28-2"></a>    <span class="st">&quot;hospital&quot;</span>), <span class="dt">begin =</span> <span class="dv">0</span>, <span class="dt">end =</span> <span class="dv">365</span>, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb28-3"><a href="#cb28-3"></a>    <span class="dt">type =</span> <span class="st">&quot;total&quot;</span>, <span class="dt">full.followup =</span> F)</span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="co">#&gt;                     id ace  bb statin hospital</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N 270 245    263        0</span></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH  30  60     40       27</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo  64  64     64        0</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5 365 365    365       87</span></span>
+<span id="cb28-9"><a href="#cb28-9"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK  61  30     94        0</span></span>
+<span id="cb28-10"><a href="#cb28-10"></a><span class="co">#&gt;   ---                                         </span></span>
+<span id="cb28-11"><a href="#cb28-11"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy  60  97    126        0</span></span>
+<span id="cb28-12"><a href="#cb28-12"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ  90 128    307       57</span></span>
+<span id="cb28-13"><a href="#cb28-13"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS 246 239    289        0</span></span>
+<span id="cb28-14"><a href="#cb28-14"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp 180 157    218        0</span></span>
+<span id="cb28-15"><a href="#cb28-15"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2  62  62     60        0</span></span></code></pre></div>
+<p>Setting the full.followup parameter to TRUE will restrict attention to subjects who are fully observed during the period. Any patient with fewer than 365 days of follow-up would be removed from consideration:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">calculate.utilization</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;ace&quot;</span>, <span class="st">&quot;bb&quot;</span>, <span class="st">&quot;statin&quot;</span>, </span>
+<span id="cb29-2"><a href="#cb29-2"></a>    <span class="st">&quot;hospital&quot;</span>), <span class="dt">begin =</span> <span class="dv">0</span>, <span class="dt">end =</span> <span class="dv">365</span>, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb29-3"><a href="#cb29-3"></a>    <span class="dt">type =</span> <span class="st">&quot;total&quot;</span>, <span class="dt">full.followup =</span> T)</span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="co">#&gt;                    id ace  bb statin hospital</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="co">#&gt;   1: 01KTl0KSK88EFV8N 270 245    263        0</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="co">#&gt;   2: 01rOm5qEH4GLCiL5 365 365    365       87</span></span>
+<span id="cb29-7"><a href="#cb29-7"></a><span class="co">#&gt;   3: 09AgoPRwaNTV9bqg  90 182    222        0</span></span>
+<span id="cb29-8"><a href="#cb29-8"></a><span class="co">#&gt;   4: 0Ej1m7QODV3uGh2N 265 363    365        0</span></span>
+<span id="cb29-9"><a href="#cb29-9"></a><span class="co">#&gt;   5: 0Iog4hzdp33JXcyv 266  90    358        0</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a><span class="co">#&gt;  ---                                         </span></span>
+<span id="cb29-11"><a href="#cb29-11"></a><span class="co">#&gt; 557: zX3s9WnLFsUxvhjE 180 270    270        0</span></span>
+<span id="cb29-12"><a href="#cb29-12"></a><span class="co">#&gt; 558: zXYVDQrr2zh4bBb3 279 307    350        0</span></span>
+<span id="cb29-13"><a href="#cb29-13"></a><span class="co">#&gt; 559: zaJV99JUjXSXsS7g 194 233    295       39</span></span>
+<span id="cb29-14"><a href="#cb29-14"></a><span class="co">#&gt; 560: zqMNWR16s2XrWiYJ  90 128    307       57</span></span>
+<span id="cb29-15"><a href="#cb29-15"></a><span class="co">#&gt; 561: zs7NTtHeWTecHvxS 246 239    289        0</span></span></code></pre></div>
+<p>Utilization can also be calculated as a proportion of the period of observation, dividing the total days of utilization by the total days of follow-up:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>med.utilization.rates &lt;-<span class="st"> </span><span class="kw">calculate.utilization</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;ace&quot;</span>, </span>
+<span id="cb30-2"><a href="#cb30-2"></a>    <span class="st">&quot;bb&quot;</span>, <span class="st">&quot;statin&quot;</span>, <span class="st">&quot;hospital&quot;</span>), <span class="dt">begin =</span> <span class="dv">0</span>, <span class="dt">end =</span> <span class="dv">365</span>, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb30-3"><a href="#cb30-3"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;rate&quot;</span>, <span class="dt">full.followup =</span> T)</span>
+<span id="cb30-4"><a href="#cb30-4"></a></span>
+<span id="cb30-5"><a href="#cb30-5"></a>med.utilization.rates</span>
+<span id="cb30-6"><a href="#cb30-6"></a><span class="co">#&gt;                    id       ace        bb    statin  hospital</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a><span class="co">#&gt;   1: 01KTl0KSK88EFV8N 0.7397260 0.6712329 0.7205479 0.0000000</span></span>
+<span id="cb30-8"><a href="#cb30-8"></a><span class="co">#&gt;   2: 01rOm5qEH4GLCiL5 1.0000000 1.0000000 1.0000000 0.2383562</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a><span class="co">#&gt;   3: 09AgoPRwaNTV9bqg 0.2465753 0.4986301 0.6082192 0.0000000</span></span>
+<span id="cb30-10"><a href="#cb30-10"></a><span class="co">#&gt;   4: 0Ej1m7QODV3uGh2N 0.7260274 0.9945205 1.0000000 0.0000000</span></span>
+<span id="cb30-11"><a href="#cb30-11"></a><span class="co">#&gt;   5: 0Iog4hzdp33JXcyv 0.7287671 0.2465753 0.9808219 0.0000000</span></span>
+<span id="cb30-12"><a href="#cb30-12"></a><span class="co">#&gt;  ---                                                         </span></span>
+<span id="cb30-13"><a href="#cb30-13"></a><span class="co">#&gt; 557: zX3s9WnLFsUxvhjE 0.4931507 0.7397260 0.7397260 0.0000000</span></span>
+<span id="cb30-14"><a href="#cb30-14"></a><span class="co">#&gt; 558: zXYVDQrr2zh4bBb3 0.7643836 0.8410959 0.9589041 0.0000000</span></span>
+<span id="cb30-15"><a href="#cb30-15"></a><span class="co">#&gt; 559: zaJV99JUjXSXsS7g 0.5315068 0.6383562 0.8082192 0.1068493</span></span>
+<span id="cb30-16"><a href="#cb30-16"></a><span class="co">#&gt; 560: zqMNWR16s2XrWiYJ 0.2465753 0.3506849 0.8410959 0.1561644</span></span>
+<span id="cb30-17"><a href="#cb30-17"></a><span class="co">#&gt; 561: zs7NTtHeWTecHvxS 0.6739726 0.6547945 0.7917808 0.0000000</span></span></code></pre></div>
+<p>These rates can then be used in subsequent calculations. For instance, we could calculate the proportion of the patients with at least 365 days of follow-up who possessed each medication at least 80% of the time:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>med.utilization.rates[, <span class="kw">lapply</span>(<span class="dt">X =</span> .SD, <span class="dt">FUN =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb31-2"><a href="#cb31-2"></a>    <span class="kw">return</span>(<span class="kw">mean</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.8</span>))</span>
+<span id="cb31-3"><a href="#cb31-3"></a>}), .SDcols =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;ace&quot;</span>, <span class="st">&quot;bb&quot;</span>, <span class="st">&quot;statin&quot;</span>)]</span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="co">#&gt;          ace        bb    statin</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a><span class="co">#&gt; 1: 0.2174688 0.3368984 0.5579323</span></span></code></pre></div>
+<p>Then, based upon these calculations, we would be able to compare the medications in terms of the proportion of patients with a sufficient degree of utilization.</p>
+</div>
+<div id="counting-events" class="section level2">
+<h2>Counting Events</h2>
+<p>Outcome variables can also be analyzed in terms of their overall counts, such as the number of deaths or hospitalizations in the sample. The <strong>count.events</strong> method is used to calculate the number of rows in which a binary variable is set to TRUE:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">count.events</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">type =</span> <span class="st">&quot;overall&quot;</span>)</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="co">#&gt;    hospital death</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co">#&gt; 1:     1678   148</span></span></code></pre></div>
+<p>This count can also be framed in terms of the <strong>distinct</strong> occurrences of an event. When type = “distinct”, the count.events method only adds to the count when an event is preceded by a gap in utilization.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">count.events</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">type =</span> <span class="st">&quot;distinct&quot;</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="co">#&gt;    hospital death</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="co">#&gt; 1:     1007   148</span></span></code></pre></div>
+<p>In particular, distinct counting reduces the count of hospitalizations substantially. Some hospitalizations extend over a period encompassing multiple rows of observation. (For instance, if the patient’s medications are changed during the hospitalization, it would trigger the formation of an additional row in the panel without discharing the patient from the hospital.) Hospitalizations in particular have costs associated with admission and separate costs based on the length of stay. As an example, if one patient had an admission for 3 days and another for 5, the costs could be substantially different than a single admission that lasts for 8 days.</p>
+<p>The count.events method also allows for grouped calculations based on at least one categorical variable. For instance, we could count the number of distinct hospitalizations and deaths in each geographic region:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">count.events</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">grouping.variables =</span> <span class="st">&quot;region&quot;</span>, </span>
+<span id="cb34-2"><a href="#cb34-2"></a>    <span class="dt">type =</span> <span class="st">&quot;distinct&quot;</span>)</span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#&gt;       region hospital death</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="co">#&gt; 1:   Midwest      222    40</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a><span class="co">#&gt; 2: Northeast      310    41</span></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="co">#&gt; 3:     South      163    28</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="co">#&gt; 4:      West      313    39</span></span></code></pre></div>
+<p>The count.events method can also produce counts for individual subjects when the identifier is used as a grouping variable:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">count.events</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">grouping.variables =</span> <span class="st">&quot;id&quot;</span>, </span>
+<span id="cb35-2"><a href="#cb35-2"></a>    <span class="dt">type =</span> <span class="st">&quot;distinct&quot;</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="co">#&gt;                     id hospital death</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N        0     0</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH        1     1</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo        0     0</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5        8     0</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK        0     0</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="co">#&gt;   ---                                </span></span>
+<span id="cb35-10"><a href="#cb35-10"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy        0     0</span></span>
+<span id="cb35-11"><a href="#cb35-11"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ        2     0</span></span>
+<span id="cb35-12"><a href="#cb35-12"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS        0     0</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp        1     0</span></span>
+<span id="cb35-14"><a href="#cb35-14"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2        0     0</span></span></code></pre></div>
+<p>Likewise, we could also group the patients by their treatment status, such as examining the combinations of utilization of ace inhibitors and beta blockers at the time of an event:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">count.events</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">grouping.variables =</span> <span class="kw">c</span>(<span class="st">&quot;ace&quot;</span>, </span>
+<span id="cb36-2"><a href="#cb36-2"></a>    <span class="st">&quot;bb&quot;</span>), <span class="dt">type =</span> <span class="st">&quot;distinct&quot;</span>)</span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#&gt;    ace bb hospital death</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="co">#&gt; 1:   0  0      320    86</span></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="co">#&gt; 2:   0  1      228     9</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="co">#&gt; 3:   1  0      182    24</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="co">#&gt; 4:   1  1      282    29</span></span></code></pre></div>
+</div>
+<div id="crude-rates-of-events" class="section level2">
+<h2>Crude Rates of Events</h2>
+<p>Comparing groups in terms of their total events does not incorporate the degree of follow-up time. If one patient is hospitalized once in 6 months of observation, and if a second patient is hospitalized once over the course of a year, then the first patient’s rate of events per year could be estimated as double that of the second patient’s rate. The <strong>crude.rates</strong> method is designed to calculate the number of events divided by the amount of <strong>person-time follow-up</strong> (the total length of follow-up summed over the relevant patients). Looking at the full simulated.chd data, the rates of distinct events of hospitalizations and mortality are:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">type =</span> <span class="st">&quot;distinct&quot;</span>)</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="co">#&gt;           period observation.time hospital death hospital.rate   death.rate</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="co">#&gt; 1: All Follow-Up           722772     1007   148   0.001393247 0.0002047672</span></span></code></pre></div>
+<p>The rates would translate to roughly 0.0014 hospitalizations and 0.0002 deaths per person-day of followup.</p>
+<p>When interpreting these results, it can be helpful to recharacterize the period of time. For instance, using 100 person-years of follow-up can place the rates onto a scale that is more similar to a human life span. The crude.rates method implements this by specifying a time.multiplier:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">time.multiplier =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="st">    </span><span class="fl">365.25</span>)</span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="co">#&gt;           period observation.time hospital death hospital.rate death.rate</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="co">#&gt; 1: All Follow-Up           722772     1678   148      84.79707   7.479122</span></span></code></pre></div>
+<p>These crude rates can then be grouped by categorical variables. Here we compare the event rates for patients on and off of each medication:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">time.multiplier =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="st">    </span><span class="fl">365.25</span>, <span class="dt">grouping.variables =</span> <span class="st">&quot;ace&quot;</span>)</span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co">#&gt;    ace        period observation.time hospital death hospital.rate death.rate</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="co">#&gt; 1:   0 All Follow-Up           340745      887    95      95.07894  10.183202</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="co">#&gt; 2:   1 All Follow-Up           382027      791    53      75.62626   5.067247</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a></span>
+<span id="cb39-7"><a href="#cb39-7"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">time.multiplier =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb39-8"><a href="#cb39-8"></a><span class="st">    </span><span class="fl">365.25</span>, <span class="dt">grouping.variables =</span> <span class="st">&quot;bb&quot;</span>)</span>
+<span id="cb39-9"><a href="#cb39-9"></a><span class="co">#&gt;    bb        period observation.time hospital death hospital.rate death.rate</span></span>
+<span id="cb39-10"><a href="#cb39-10"></a><span class="co">#&gt; 1:  0 All Follow-Up           274077      819   110     109.14442  14.659202</span></span>
+<span id="cb39-11"><a href="#cb39-11"></a><span class="co">#&gt; 2:  1 All Follow-Up           448695      859    38      69.92495   3.093304</span></span>
+<span id="cb39-12"><a href="#cb39-12"></a></span>
+<span id="cb39-13"><a href="#cb39-13"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">time.multiplier =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb39-14"><a href="#cb39-14"></a><span class="st">    </span><span class="fl">365.25</span>, <span class="dt">grouping.variables =</span> <span class="st">&quot;statin&quot;</span>)</span>
+<span id="cb39-15"><a href="#cb39-15"></a><span class="co">#&gt;    statin        period observation.time hospital death hospital.rate</span></span>
+<span id="cb39-16"><a href="#cb39-16"></a><span class="co">#&gt; 1:      0 All Follow-Up           187581      645   107      125.5917</span></span>
+<span id="cb39-17"><a href="#cb39-17"></a><span class="co">#&gt; 2:      1 All Follow-Up           535191     1033    41       70.4988</span></span>
+<span id="cb39-18"><a href="#cb39-18"></a><span class="co">#&gt;    death.rate</span></span>
+<span id="cb39-19"><a href="#cb39-19"></a><span class="co">#&gt; 1:  20.834599</span></span>
+<span id="cb39-20"><a href="#cb39-20"></a><span class="co">#&gt; 2:   2.798113</span></span></code></pre></div>
+<p>The ratio of these crude rates could be one estimate of the treatment effect, showing that patients who take these medications have lower rates of mortality and hospitalizations. However, some caveats apply: these crude rates may reflect confounding from other variables (measured or unmeasured) in observational studies. Additionally, complex factors can be at play. For instance, a patient with clear warning signs of an adverse event may be placed on these medications. If the event occurs shortly thereafter, the data would dubiously show a harmful association between the medication and the event. Without care in interpretation, we might falsely conclude that going to the hospital is the factor that creates the most hazard for mortality.</p>
+<p>The crude rates can also be calculated in different eras at time by specifying numeric cut.points:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">time.multiplier =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="st">    </span><span class="fl">365.25</span>, <span class="dt">cut.points =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">365</span><span class="op">/</span><span class="dv">2</span>))</span>
+<span id="cb40-3"><a href="#cb40-3"></a><span class="co">#&gt;               period observation.time hospital death hospital.rate death.rate</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="co">#&gt; 1:         Before 90          87670.0      214    22       89.1565   9.165621</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="co">#&gt; 2: On or After 182.5         571052.5     1305    91       83.4689   5.820437</span></span>
+<span id="cb40-6"><a href="#cb40-6"></a><span class="co">#&gt; 3:       [90, 182.5)          64049.5      218    35      124.3171  19.959172</span></span></code></pre></div>
+<p>These calculations can also be performed in groups, such as comparing patients on and off beta blockers in each era in terms of their rates of hospitalization and mortality:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">crude.rates</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.names =</span> <span class="kw">c</span>(<span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;death&quot;</span>), <span class="dt">time.multiplier =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="st">    </span><span class="fl">365.25</span>, <span class="dt">grouping.variables =</span> <span class="st">&quot;bb&quot;</span>, <span class="dt">cut.points =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">365</span><span class="op">/</span><span class="dv">2</span>))</span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="co">#&gt;    bb            period observation.time hospital death hospital.rate</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="co">#&gt; 1:  0         Before 90          29169.0      104    13     130.22730</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a><span class="co">#&gt; 2:  0 On or After 182.5         225173.0      633    70     102.67805</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="co">#&gt; 3:  0       [90, 182.5)          17996.0       91    27     184.69521</span></span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="co">#&gt; 4:  1         Before 90          58501.0      110     9      68.67831</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a><span class="co">#&gt; 5:  1 On or After 182.5         345565.5      671    21      70.92223</span></span>
+<span id="cb41-9"><a href="#cb41-9"></a><span class="co">#&gt; 6:  1       [90, 182.5)          38920.5       95     8      89.15289</span></span>
+<span id="cb41-10"><a href="#cb41-10"></a><span class="co">#&gt;    death.rate</span></span>
+<span id="cb41-11"><a href="#cb41-11"></a><span class="co">#&gt; 1:  16.278412</span></span>
+<span id="cb41-12"><a href="#cb41-12"></a><span class="co">#&gt; 2:  11.354603</span></span>
+<span id="cb41-13"><a href="#cb41-13"></a><span class="co">#&gt; 3:  54.799678</span></span>
+<span id="cb41-14"><a href="#cb41-14"></a><span class="co">#&gt; 4:   5.619135</span></span>
+<span id="cb41-15"><a href="#cb41-15"></a><span class="co">#&gt; 5:   2.219623</span></span>
+<span id="cb41-16"><a href="#cb41-16"></a><span class="co">#&gt; 6:   7.507612</span></span></code></pre></div>
+<p>Panel data presents challenges for separating the data into eras of time. Many rows of data may include intervals of time that overlap multiple eras. The crude.rates method relies upon the <strong>era.splits</strong> method to restructure the data. For rows that overlap the eras specified by the cut.points, the method adds new rows to the data set and modifies the time points of the existing rows. This ensures that each row belongs to a single era and that no information is lost.</p>
+<p>As an example, let’s consider the first two rows of the simulated.chd data:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>simulated.chd[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, .SD, .SDcols =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;t1&quot;</span>, <span class="st">&quot;t2&quot;</span>)]</span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="co">#&gt;                  id t1 t2</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  8 30</span></span></code></pre></div>
+<p>Suppose an analysis wants to consider the experience of patients in several periods: a) before 3 days, b) at least 3 and less than 5 days, and c) all subsequent follow-up starting at 5 days. Applying the era.splits method to these two rows of data splits the first row into 3 rows of data that are mutually exclusive, collectively exhaustive, and aligned with the specified eras:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw">era.splits</span>(<span class="dt">dat =</span> simulated.chd[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, .SD, <span class="dt">.SDcols =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;t1&quot;</span>, <span class="st">&quot;t2&quot;</span>)], <span class="dt">cut.points =</span> <span class="kw">c</span>(<span class="dv">3</span>, </span>
+<span id="cb43-2"><a href="#cb43-2"></a>    <span class="dv">5</span>))</span>
+<span id="cb43-3"><a href="#cb43-3"></a><span class="co">#&gt;                  id t1 t2</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  3</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  3  5</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N  5  8</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a><span class="co">#&gt; 4: 01KTl0KSK88EFV8N  8 30</span></span></code></pre></div>
+</div>
+<div id="quality-checks-of-panel-data" class="section level2">
+<h2>Quality Checks of Panel Data</h2>
+<p>The complexity and unfamiliarity of the panel structure can present challenges in basic investigations of the data. The tvtools package includes a number of methods for identifying potential issues with panel data.</p>
+<div id="measurement-rates" class="section level3">
+<h3>Measurement Rates</h3>
+<p>Longitudinal data may be subject to censoring and loss of follow-up. The measurement.rate function calculates the proportion of subjects who have records at the specified point in follow-up:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="kw">measurement.rate</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb44-2"><a href="#cb44-2"></a>    <span class="dt">time.point =</span> <span class="dv">365</span>)</span>
+<span id="cb44-3"><a href="#cb44-3"></a><span class="co">#&gt;    time observed total.subjects rate.observed rate.not.observed</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a><span class="co">#&gt; 1:  365      556           1000         0.556             0.444</span></span></code></pre></div>
+<p>Note that the rate not observed incorporates a) patients censored or lost to follow-up at that time, and also b) patients who did not survive to that time.</p>
+<p>The rate of measurement can also be calculated in groups:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">measurement.rate</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>, </span>
+<span id="cb45-2"><a href="#cb45-2"></a>    <span class="dt">time.point =</span> <span class="dv">365</span>, <span class="dt">grouping.variables =</span> <span class="st">&quot;region&quot;</span>)</span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="co">#&gt;       region time observed total.subjects rate.observed rate.not.observed</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="co">#&gt; 1:   Midwest  365      103            191     0.5392670         0.4607330</span></span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="co">#&gt; 2: Northeast  365      167            294     0.5680272         0.4319728</span></span>
+<span id="cb45-6"><a href="#cb45-6"></a><span class="co">#&gt; 3:     South  365      113            196     0.5765306         0.4234694</span></span>
+<span id="cb45-7"><a href="#cb45-7"></a><span class="co">#&gt; 4:      West  365      173            319     0.5423197         0.4576803</span></span></code></pre></div>
+</div>
+<div id="panel-gaps" class="section level3">
+<h3>Panel Gaps</h3>
+<p>Longitudinal records can include periods of censorship. In panel data, this would show up through the absence of a record. The <strong>panel.gaps</strong> method is designed to identify gaps between earlier and later observed times, with an assumed starting time of t1 = 0. Here we can verify no gaps in the simulated.chd data:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>pg.check =<span class="st"> </span><span class="kw">panel.gaps</span>(<span class="dt">dat =</span> orig.data, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb46-2"><a href="#cb46-2"></a>pg.check[, .N, gap_before]</span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="co">#&gt;    gap_before     N</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="co">#&gt; 1:      FALSE 33572</span></span></code></pre></div>
+<p>We could also artificially construct gaps in the panel data by only selecting a subset of rows. This will verify that the panel gaps are correctly identified:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>gap.dat &lt;-<span class="st"> </span>simulated.chd[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">58</span>, <span class="dv">60</span>, <span class="dv">64</span>), ]</span>
+<span id="cb47-2"><a href="#cb47-2"></a>pg.check<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">panel.gaps</span>(<span class="dt">dat =</span> gap.dat, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb47-3"><a href="#cb47-3"></a>pg.check<span class="fl">.2</span>[, .SD, .SDcols =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;t1&quot;</span>, <span class="st">&quot;t2&quot;</span>, <span class="st">&quot;gap_before&quot;</span>)]</span>
+<span id="cb47-4"><a href="#cb47-4"></a><span class="co">#&gt;                  id t1 t2 gap_before</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8      FALSE</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N 30 38       TRUE</span></span>
+<span id="cb47-7"><a href="#cb47-7"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N 46 66       TRUE</span></span>
+<span id="cb47-8"><a href="#cb47-8"></a><span class="co">#&gt; 4: 01KTl0KSK88EFV8N 90 94       TRUE</span></span>
+<span id="cb47-9"><a href="#cb47-9"></a><span class="co">#&gt; 5: 01ZbYuUoYJeIyiVH  0  1      FALSE</span></span>
+<span id="cb47-10"><a href="#cb47-10"></a><span class="co">#&gt; 6: 01ZbYuUoYJeIyiVH 10 30       TRUE</span></span>
+<span id="cb47-11"><a href="#cb47-11"></a><span class="co">#&gt; 7: 01ZbYuUoYJeIyiVH 70 70       TRUE</span></span></code></pre></div>
+<p>We can also identify the earliest gap for each subject using <strong>first.panel.gap</strong>:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="kw">first.panel.gap</span>(<span class="dt">dat =</span> gap.dat, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="co">#&gt;                  id gap_before.first.event</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N                     30</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a><span class="co">#&gt; 2: 01ZbYuUoYJeIyiVH                     10</span></span></code></pre></div>
+<p>Likewise, a subject’s latest gap can be found with <strong>last.panel.gap</strong>:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="kw">last.panel.gap</span>(<span class="dt">dat =</span> gap.dat, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb49-2"><a href="#cb49-2"></a><span class="co">#&gt;                  id gap_before.last.event</span></span>
+<span id="cb49-3"><a href="#cb49-3"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N                    90</span></span>
+<span id="cb49-4"><a href="#cb49-4"></a><span class="co">#&gt; 2: 01ZbYuUoYJeIyiVH                    70</span></span></code></pre></div>
+</div>
+<div id="panel-overlaps" class="section level3">
+<h3>Panel Overlaps</h3>
+<p>For a single subject, we assume that the panel data is structured so that the rows and time intervals will be mutually exclusive. That assumption can be validated only through investigation of the data. The panel.overlaps function identifies whether each subject has any period of potentially overlapping time intervals:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>possible.overlaps &lt;-<span class="st"> </span><span class="kw">panel.overlaps</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb50-2"><a href="#cb50-2"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb50-3"><a href="#cb50-3"></a><span class="kw">print</span>(possible.overlaps)</span>
+<span id="cb50-4"><a href="#cb50-4"></a><span class="co">#&gt;                     id overlapping_panels</span></span>
+<span id="cb50-5"><a href="#cb50-5"></a><span class="co">#&gt;    1: 01KTl0KSK88EFV8N              FALSE</span></span>
+<span id="cb50-6"><a href="#cb50-6"></a><span class="co">#&gt;    2: 01ZbYuUoYJeIyiVH              FALSE</span></span>
+<span id="cb50-7"><a href="#cb50-7"></a><span class="co">#&gt;    3: 01oLxxu87rRDCIvo              FALSE</span></span>
+<span id="cb50-8"><a href="#cb50-8"></a><span class="co">#&gt;    4: 01rOm5qEH4GLCiL5              FALSE</span></span>
+<span id="cb50-9"><a href="#cb50-9"></a><span class="co">#&gt;    5: 021eg6OjCoGotbXK              FALSE</span></span>
+<span id="cb50-10"><a href="#cb50-10"></a><span class="co">#&gt;   ---                                    </span></span>
+<span id="cb50-11"><a href="#cb50-11"></a><span class="co">#&gt;  996: zm1gtU2uw866RDGy              FALSE</span></span>
+<span id="cb50-12"><a href="#cb50-12"></a><span class="co">#&gt;  997: zqMNWR16s2XrWiYJ              FALSE</span></span>
+<span id="cb50-13"><a href="#cb50-13"></a><span class="co">#&gt;  998: zs7NTtHeWTecHvxS              FALSE</span></span>
+<span id="cb50-14"><a href="#cb50-14"></a><span class="co">#&gt;  999: ztSPQ3OMBA2CzgSp              FALSE</span></span>
+<span id="cb50-15"><a href="#cb50-15"></a><span class="co">#&gt; 1000: zxOx9moOQBqSiKq2              FALSE</span></span>
+<span id="cb50-16"><a href="#cb50-16"></a>possible.overlaps[, <span class="kw">mean</span>(overlapping_panels <span class="op">==</span><span class="st"> </span>F)]</span>
+<span id="cb50-17"><a href="#cb50-17"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<p>This verifies that the simulated.chd meets the assumption of mutually exlusive periods of observation for each user.</p>
+<p>We can then construct a panel with overlapping observations using the gap.dat calculated in the previous section:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>overlap.dat &lt;-<span class="st"> </span>gap.dat</span>
+<span id="cb51-2"><a href="#cb51-2"></a>overlap.dat[<span class="dv">2</span>, t1 <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="dv">7</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>overlap.dat[, .SD, .SDcols =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;t1&quot;</span>, <span class="st">&quot;t2&quot;</span>)]</span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="co">#&gt;                  id t1 t2</span></span>
+<span id="cb52-3"><a href="#cb52-3"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N  0  8</span></span>
+<span id="cb52-4"><a href="#cb52-4"></a><span class="co">#&gt; 2: 01KTl0KSK88EFV8N  7 38</span></span>
+<span id="cb52-5"><a href="#cb52-5"></a><span class="co">#&gt; 3: 01KTl0KSK88EFV8N 46 66</span></span>
+<span id="cb52-6"><a href="#cb52-6"></a><span class="co">#&gt; 4: 01KTl0KSK88EFV8N 90 94</span></span>
+<span id="cb52-7"><a href="#cb52-7"></a><span class="co">#&gt; 5: 01ZbYuUoYJeIyiVH  0  1</span></span>
+<span id="cb52-8"><a href="#cb52-8"></a><span class="co">#&gt; 6: 01ZbYuUoYJeIyiVH 10 30</span></span>
+<span id="cb52-9"><a href="#cb52-9"></a><span class="co">#&gt; 7: 01ZbYuUoYJeIyiVH 70 70</span></span>
+<span id="cb52-10"><a href="#cb52-10"></a><span class="kw">panel.overlaps</span>(<span class="dt">dat =</span> overlap.dat, <span class="dt">id.name =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb52-11"><a href="#cb52-11"></a><span class="co">#&gt;                  id overlapping_panels</span></span>
+<span id="cb52-12"><a href="#cb52-12"></a><span class="co">#&gt; 1: 01KTl0KSK88EFV8N               TRUE</span></span>
+<span id="cb52-13"><a href="#cb52-13"></a><span class="co">#&gt; 2: 01ZbYuUoYJeIyiVH              FALSE</span></span></code></pre></div>
+<p>It should be noted that panel.overlaps requires pairwise comparisons of the time intervals within each subject. As a result, larger panels can require some computational time to complete the investigation of overlaps.</p>
+</div>
+</div>
+<div id="events-of-unusual-duration" class="section level2">
+<h2>Events of Unusual Duration</h2>
+<p>Panel data is structured on the notion that new events will take effect at the beginning of the time interval for the record. This assumption should be carefully verified in data analyses. For instance, one might erroneously code death at the end of the last interval of observation. If the last interval is especially lengthy, an analysis of the data might systematically record the deaths at significantly earlier times than they occurred.</p>
+<p>The <strong>unusual.duration</strong> method is designed to identify cases in which an event occurs and the duration of the interval is long enough to be considered unusual. For instance, we might identify the hospitalizations that last longer than 100 days (in a single row):</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>long.hospitalizations &lt;-<span class="st"> </span><span class="kw">unusual.duration</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.name =</span> <span class="st">&quot;hospital&quot;</span>, </span>
+<span id="cb53-2"><a href="#cb53-2"></a>    <span class="dt">max.length =</span> <span class="dv">100</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb53-3"><a href="#cb53-3"></a>long.hospitalizations[, .SD, .SDcols =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;t1&quot;</span>, <span class="st">&quot;t2&quot;</span>, <span class="st">&quot;hospital&quot;</span>)]</span>
+<span id="cb53-4"><a href="#cb53-4"></a><span class="co">#&gt;                   id   t1   t2 hospital</span></span>
+<span id="cb53-5"><a href="#cb53-5"></a><span class="co">#&gt;  1: 01rOm5qEH4GLCiL5  562  823        1</span></span>
+<span id="cb53-6"><a href="#cb53-6"></a><span class="co">#&gt;  2: 01rOm5qEH4GLCiL5 1206 1372        1</span></span>
+<span id="cb53-7"><a href="#cb53-7"></a><span class="co">#&gt;  3: 378Ax3nk7KUuz9CV  507  612        1</span></span>
+<span id="cb53-8"><a href="#cb53-8"></a><span class="co">#&gt;  4: 5bsGQKWkbeqqCDun 1487 1929        1</span></span>
+<span id="cb53-9"><a href="#cb53-9"></a><span class="co">#&gt;  5: 5bsGQKWkbeqqCDun 2035 2314        1</span></span>
+<span id="cb53-10"><a href="#cb53-10"></a><span class="co">#&gt;  6: AnDxV4tHY0ceJg8R 1744 1854        1</span></span>
+<span id="cb53-11"><a href="#cb53-11"></a><span class="co">#&gt;  7: D8GJSiAFkcv29KYV 1688 1829        1</span></span>
+<span id="cb53-12"><a href="#cb53-12"></a><span class="co">#&gt;  8: FhkQxeEx9dvO2iZb 1387 1545        1</span></span>
+<span id="cb53-13"><a href="#cb53-13"></a><span class="co">#&gt;  9: H8aM5GuMndOLTrF8 1670 1832        1</span></span>
+<span id="cb53-14"><a href="#cb53-14"></a><span class="co">#&gt; 10: IJQFwVwBBc23vpmK 2001 2206        1</span></span>
+<span id="cb53-15"><a href="#cb53-15"></a><span class="co">#&gt; 11: QUUws4eexQZxWIl9  645  822        1</span></span>
+<span id="cb53-16"><a href="#cb53-16"></a><span class="co">#&gt; 12: REaoGgY18CgbLneN 1854 2031        1</span></span>
+<span id="cb53-17"><a href="#cb53-17"></a><span class="co">#&gt; 13: RtwWZQiF192PDFR9  387  554        1</span></span>
+<span id="cb53-18"><a href="#cb53-18"></a><span class="co">#&gt; 14: V5xu6shLtlYaIVWB  848 1002        1</span></span>
+<span id="cb53-19"><a href="#cb53-19"></a><span class="co">#&gt; 15: VUjW6PZAYA6OQQM3 2134 2400        1</span></span>
+<span id="cb53-20"><a href="#cb53-20"></a><span class="co">#&gt; 16: ZIa8W5pvnPoETLye  288  452        1</span></span>
+<span id="cb53-21"><a href="#cb53-21"></a><span class="co">#&gt; 17: ZSWU3tOI1LqYYd1N  656  832        1</span></span>
+<span id="cb53-22"><a href="#cb53-22"></a><span class="co">#&gt; 18: d8CIC18WilrexiD1  373  549        1</span></span>
+<span id="cb53-23"><a href="#cb53-23"></a><span class="co">#&gt; 19: d8CIC18WilrexiD1 1752 1914        1</span></span>
+<span id="cb53-24"><a href="#cb53-24"></a><span class="co">#&gt; 20: dCUgM2bLCEzlMvqt 1669 1849        1</span></span>
+<span id="cb53-25"><a href="#cb53-25"></a><span class="co">#&gt; 21: dQ4PHmnuZel9Aicq  684  849        1</span></span>
+<span id="cb53-26"><a href="#cb53-26"></a><span class="co">#&gt; 22: jGjvJOMwhwyQtipu 1208 1561        1</span></span>
+<span id="cb53-27"><a href="#cb53-27"></a><span class="co">#&gt; 23: vIpAgiKixKObEXfh  814  948        1</span></span>
+<span id="cb53-28"><a href="#cb53-28"></a><span class="co">#&gt;                   id   t1   t2 hospital</span></span></code></pre></div>
+<p>These cases might be further investigated to ensure the accuracy of the data. Likewise, we could also verify that deaths are not recorded for a period greater than 1 day:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="kw">unusual.duration</span>(<span class="dt">dat =</span> simulated.chd, <span class="dt">outcome.name =</span> <span class="st">&quot;death&quot;</span>, <span class="dt">max.length =</span> <span class="dv">1</span>, <span class="dt">t1.name =</span> <span class="st">&quot;t1&quot;</span>, </span>
+<span id="cb54-2"><a href="#cb54-2"></a>    <span class="dt">t2.name =</span> <span class="st">&quot;t2&quot;</span>)</span>
+<span id="cb54-3"><a href="#cb54-3"></a><span class="co">#&gt; Empty data.table (0 rows and 15 cols): id,t1,t2,age,sex,region...</span></span></code></pre></div>
+<p>This verifies that the time of mortality will not be misinterpreted based upon differences between the beginning and end of the interval of observation. If large differences are noted, then some restructuring of the data may be necessary.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
